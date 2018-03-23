@@ -1,5 +1,6 @@
 package com.wsa500.endpoint;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -9,9 +10,6 @@ import javax.jws.WebService;
 import com.wsa500.business.SalesBusiness;
 import com.wsa500.business.SalesBusinessImpl;
 import com.wsa500.entity.Customer;
-import com.wsa500.entity.ListProductRequest;
-import com.wsa500.entity.ListProductResponse;
-import com.wsa500.entity.ListSalesResponse;
 import com.wsa500.entity.ObjectFactory;
 import com.wsa500.entity.Product;
 import com.wsa500.entity.Sale;
@@ -32,34 +30,20 @@ public class SalesService {
 	}
 	
 	@WebMethod(action = "listCustomerSales")
-	public ListSalesResponse listCustomerSales(
+	public List<Sale> listCustomerSales(
 		@WebParam(name = "customerLastName") String lastName) {
-		ListSalesResponse response =  new ListSalesResponse();
-		List<Sale> sales = businessService.listSalesByCustomerLastName(lastName);
-		if (sales != null) {
-			for (Sale sale: sales) {
-				response.getSales().add(sale);
-			}
-		}
-		return response;
+		return businessService.listSalesByCustomerLastName(lastName);
 	}
 	
 	@WebMethod(action = "listProduct")
-	public ListProductResponse listProduct(
-		@WebParam(name = "listProductRequest") ListProductRequest request) {
-		ListProductResponse response = new ListProductResponse();
-		List<Product> products;
-		if (request.getUnitCost() != null) {
-			products = businessService.listProductByCost(request.getUnitCost());
+	public List<Product> listProduct(
+		@WebParam(name = "cost") BigDecimal cost,
+		@WebParam(name = "unitPrice") BigDecimal unitPrice) {
+		if (cost != null) {
+			return businessService.listProductByCost(cost);
 		} else {
-			products = businessService.listProductByUnitPrice(request.getUnitPrice());
+			return businessService.listProductByUnitPrice(unitPrice);
 		}
-		if (products != null) {
-			for (Product product: products) {
-				response.getProducts().add(product);
-			}
-		}
-		return response;
 	}
 	
 	@WebMethod(action = "insertCustomer")
