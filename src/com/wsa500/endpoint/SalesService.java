@@ -22,11 +22,9 @@ import com.wsa500.entity.Sale;
 )
 public class SalesService {
 	private final SalesBusiness businessService;
-	private final ObjectFactory objectFactory;
 	
  	public SalesService() {
 		this.businessService = new SalesBusinessImpl();
-		this.objectFactory = new ObjectFactory();
 	}
 	
 	@WebMethod(action = "listCustomerSales")

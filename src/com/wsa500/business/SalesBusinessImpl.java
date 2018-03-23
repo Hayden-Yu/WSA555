@@ -1,6 +1,10 @@
 package com.wsa500.business;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -58,4 +62,33 @@ public class SalesBusinessImpl implements SalesBusiness {
 		return null;
 	}
 
+	
+	private ResultSet executeSQL(String sql, Object...params) throws SQLException {
+		Connection connection = null; 
+		try {
+			connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+			for (int i = 0; i < params.length; i++) {
+				if (params[i] instanceof String) {
+					statement.setString(i + 1, (String)params[i]);
+				}
+				else if (params[i] instanceof BigDecimal) {
+					statement.setBigDecimal(i + 1, (BigDecimal)params[i]);
+				}
+				else if (params[i].getClass() == int.class ||
+						params[i] instanceof Integer) {
+					statement.setInt(i + 1, (int)params[i]);
+				} else {
+					throw new RuntimeException(
+						"Type " + params[i].getClass() + " is not yet supported");
+				}
+			}
+			return statement.executeQuery();
+		}
+		finally {
+			if (connection != null) {
+				connection.close();
+			}
+		}
+	}
 }

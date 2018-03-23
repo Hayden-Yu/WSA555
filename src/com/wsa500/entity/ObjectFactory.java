@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
+import com.wsa500.endpoint.jaxws.*;
 
 /**
  * This object contains factory methods for each 
