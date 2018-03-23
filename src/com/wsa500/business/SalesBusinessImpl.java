@@ -2,6 +2,8 @@ package com.wsa500.business;
 
 import java.math.BigDecimal;
 import java.util.List;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import com.wsa500.entity.Customer;
 import com.wsa500.entity.Product;
@@ -9,6 +11,17 @@ import com.wsa500.entity.Sale;
 
 public class SalesBusinessImpl implements SalesBusiness {
 
+	private DataSource dataSource;
+	
+	public SalesBusinessImpl() {
+		try {
+			InitialContext ctx = new InitialContext();
+			this.dataSource = (DataSource) ctx.lookup("jdbc/Mysql_wsa500");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public List<Sale> listSalesByCustomerLastName(String lastName) {
 		// TODO Auto-generated method stub
