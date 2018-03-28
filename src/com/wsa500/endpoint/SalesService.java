@@ -10,7 +10,6 @@ import javax.jws.WebService;
 import com.wsa500.business.SalesBusiness;
 import com.wsa500.business.SalesBusinessImpl;
 import com.wsa500.entity.Customer;
-import com.wsa500.entity.ObjectFactory;
 import com.wsa500.entity.Product;
 import com.wsa500.entity.Sale;
 
