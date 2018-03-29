@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import javax.naming.InitialContext;
@@ -37,7 +38,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	public List<Product> listProductByUnitPrice(BigDecimal unitPrice) {
 		LinkedList<Product> products = new LinkedList<Product>();
 		try {
-			ResultSet rs = executeSQL("SELECT * FROM `product` WHERE UnitPrice = ?", unitPrice);
+			ResultSet rs = executeQuery("SELECT * FROM `product` WHERE UnitPrice = ?", unitPrice);
 			while(rs.next()) {
 				Product product = new Product();
 				product.setProductId(rs.getInt("ProductID"));
@@ -57,7 +58,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	public List<Product> listProductByCost(BigDecimal cost) {
 		LinkedList<Product> products = new LinkedList<Product>();
 		try {
-			ResultSet rs = executeSQL("SELECT * FROM `product` WHERE UnitCost = ?", cost);
+			ResultSet rs = executeQuery("SELECT * FROM `product` WHERE UnitCost = ?", cost);
 			while(rs.next()) {
 				Product product = new Product();
 				product.setProductId(rs.getInt("ProductID"));
@@ -75,14 +76,47 @@ public class SalesBusinessImpl implements SalesBusiness {
 
 	@Override
 	public Customer persistCustomer(Customer customer) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			ResultSet rs = executeUpdate("INSERT INTO `customer` (`FirstName`, `LastName`, `Address1`, `Address2`, `City`, `State`, `Zip`, `Country`) VALUES" + 
+				"(?, ?, ?, ?, ?, ?, ?, ?)", 
+				customer.getFirstName(), 
+				customer.getLastName(), 
+				customer.getAddress1(), 
+				customer.getAddress2(),
+				customer.getCity(),
+				customer.getState(),
+				customer.getZip(),
+				customer.getCountry());
+				Integer id = null;
+				if(rs.next())
+	            {
+	                id = rs.getInt(1);
+	            }
+				customer.setCustomerId(id);
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		return customer;
 	}
 
 	@Override
 	public Customer modifyCustoemr(Customer customer) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			executeUpdate("UPDATE `customer` SET `FirstName` = ?, `LastName` = ?, `Address1` = ?, `Address2` = ?, `City` = ?, `State` = ?, `Zip` = ?, `Country` = ?" + 
+				"WHERE `CustomerID` = ?",
+				customer.getFirstName(), 
+				customer.getLastName(), 
+				customer.getAddress1(), 
+				customer.getAddress2(),
+				customer.getCity(),
+				customer.getState(),
+				customer.getZip(),
+				customer.getCountry(),
+				customer.getCustomerId());
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		return customer;
 	}
 
 	@Override
@@ -92,7 +126,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	}
 
 	
-	private ResultSet executeSQL(String sql, Object...params) throws SQLException {
+	private ResultSet executeQuery(String sql, Object...params) throws SQLException {
 		Connection connection = null; 
 		try {
 			connection = dataSource.getConnection();
@@ -105,11 +139,12 @@ public class SalesBusinessImpl implements SalesBusiness {
 		}
 	}
 	
-	private boolean execute(String sql, Object...params) throws SQLException {
+	private ResultSet executeUpdate(String sql, Object...params) throws SQLException {
 		Connection connection = null;
 		try {
 			connection = dataSource.getConnection();
-			return prepareStatement(connection, sql, params).execute();
+			PreparedStatement stmt = prepareStatement(connection, sql, params);
+			return stmt.getGeneratedKeys();
 		}
 		finally {
 			if (connection != null) {
