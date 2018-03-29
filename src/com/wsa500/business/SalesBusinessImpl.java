@@ -155,7 +155,6 @@ public class SalesBusinessImpl implements SalesBusiness {
 	}
 	
 	private PreparedStatement prepareStatement(Connection connection, String sql, Object[] params) throws SQLException {
-		connection = dataSource.getConnection();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		for (int i = 0; i < params.length; i++) {
 			if (params[i] instanceof String) {
