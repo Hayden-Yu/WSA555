@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import javax.naming.InitialContext;
@@ -87,12 +86,11 @@ public class SalesBusinessImpl implements SalesBusiness {
 				customer.getState(),
 				customer.getZip(),
 				customer.getCountry());
-				Integer id = null;
-				if(rs.next())
+				if(rs!= null && rs.next())
 	            {
-	                id = rs.getInt(1);
+					customer.setCustomerId(rs.getInt(1));
 	            }
-				customer.setCustomerId(id);
+				
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 		}
@@ -144,6 +142,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 		try {
 			connection = dataSource.getConnection();
 			PreparedStatement stmt = prepareStatement(connection, sql, params);
+			stmt.executeUpdate();
 			return stmt.getGeneratedKeys();
 		}
 		finally {
