@@ -1,3 +1,23 @@
+**To Setup:**
+- Start mysql server, initialize database with [schema.sql](schema.sql) and [data.sql](data.sql)
+- Start glassfish server:  `${path to glassfish4}/bin/asadmin start-domain domain1`
+- Create database on mysql server and setup proper jdbc connection on glassfish
+
+    Example of properties for creating a connection pool:  
+
+        serverName   : localhost
+        port         : 3306
+        databaseName : wsa500_sales
+        user         : wsa500_sales
+        password     : salesPassword
+- Create JDBC Resource for referencing connection pool with name `jdbc/wsa500_sales`
+- Build, archieve project, deploy onto glassfish server  
+  
+    
+    
+Below are original instruction for completing the assignment:
+====
+
 **Sales system (20 % of the total mark)**
 
 **SalesRep Table:**
