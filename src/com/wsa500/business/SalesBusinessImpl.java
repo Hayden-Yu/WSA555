@@ -13,6 +13,8 @@ import javax.sql.DataSource;
 import com.wsa500.entity.Customer;
 import com.wsa500.entity.Product;
 import com.wsa500.entity.Sale;
+import com.wsa500.entity.SalesRep;
+import com.wsa500.entity.Time;
 
 public class SalesBusinessImpl implements SalesBusiness {
 
@@ -29,8 +31,67 @@ public class SalesBusinessImpl implements SalesBusiness {
 	
 	@Override
 	public List<Sale> listSalesByCustomerLastName(String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+		LinkedList<Sale> sales = new LinkedList<>();
+		try {
+			ResultSet rs = executeQuery(
+				"SELECT SalesAmount, Customer.CustomerID, Customer.FirstName AS CSFirstName, Customer.LastName AS CSLastName, " + 
+				"Customer.Address1 AS CSAddress1, Customer.Address2 AS CSAddress2, Customer.City AS CSCity, " + 
+				"Customer.State AS CSState, Customer.Zip AS CSZip, Customer.Country AS CSCountry, `Year`, `Quarter`, " + 
+				"`Month`, `Week`, Product.ProductID, ProductName, ProductDescription, UnitPrice, UnitCost, SalesRep.SalesRepID, " + 
+				"SalesRep.FirstName AS SRFirstName, SalesRep.LastName AS SRLastName, SalesRep.Address1 AS SRAddress1, " + 
+				"SalesRep.Address2 AS SRAddress2, SalesRep.City AS SRCity, SalesRep.State AS SRState, SalesRep.Zip AS SRZip, " + 
+				"SalesRep.Zip AS SRZip, SalesRep.Country AS SRCountry " + 
+				"FROM Sales " + 
+				"JOIN Customer ON Sales.CustomerID = Customer.CustomerID " + 
+				"JOIN `Time` ON Sales.TimeID = `Time`.TimeID " + 
+				"JOIN Product ON Sales.ProductID = Product.ProductID " + 
+				"JOIN SalesRep ON Sales.SalesRepID = SalesRep.SalesRepID " + 
+				"WHERE Customer.LastName = ?", lastName);
+			while(rs.next()) {
+				Sale sale = new Sale();
+				sale.setSalesAmount(rs.getBigDecimal("SalesAmount"));
+				
+				sale.setCustomer(new Customer());
+				sale.getCustomer().setCustomerId(rs.getInt("CustomerID"));
+				sale.getCustomer().setFirstName(rs.getString("CSFirstName"));
+				sale.getCustomer().setLastName(rs.getString("CSLastName"));
+				sale.getCustomer().setAddress1(rs.getString("CSAddress1"));
+				sale.getCustomer().setAddress2(rs.getString("CSAddress2"));
+				sale.getCustomer().setCity(rs.getString("CSCity"));
+				sale.getCustomer().setState(rs.getString("CSState"));
+				sale.getCustomer().setZip(rs.getString("CSZip"));
+				sale.getCustomer().setCountry(rs.getString("CSCountry"));
+				
+				sale.setSalesRep(new SalesRep());
+				sale.getCustomer().setCustomerId(rs.getInt("SalesRepID"));
+				sale.getCustomer().setFirstName(rs.getString("SRFirstName"));
+				sale.getCustomer().setLastName(rs.getString("SRLastName"));
+				sale.getCustomer().setAddress1(rs.getString("SRAddress1"));
+				sale.getCustomer().setAddress2(rs.getString("SRAddress2"));
+				sale.getCustomer().setCity(rs.getString("SRCity"));
+				sale.getCustomer().setState(rs.getString("SRState"));
+				sale.getCustomer().setZip(rs.getString("SRZip"));
+				sale.getCustomer().setCountry(rs.getString("SRCountry"));
+				
+				sale.setProduct(new Product());
+				sale.getProduct().setProductId(rs.getInt("ProductID"));
+				sale.getProduct().setProductName(rs.getString("ProductName"));
+				sale.getProduct().setProductDescription(rs.getString("ProductDescription"));
+				sale.getProduct().setUnitCost(rs.getBigDecimal("UnitCost"));
+				sale.getProduct().setUnitPrice(rs.getBigDecimal("UnitPrice"));
+				
+				sale.setTime(new Time());
+				sale.getTime().setYear(rs.getString("Year"));
+				sale.getTime().setQuarter(rs.getString("Quarter"));
+				sale.getTime().setMonth(rs.getString("Month"));
+				sale.getTime().setWeek(rs.getString("Week"));
+				
+				sales.add(sale);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		return sales;
 	}
 
 	@Override
@@ -76,7 +137,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	@Override
 	public Customer persistCustomer(Customer customer) {
 		try {
-			ResultSet rs = executeUpdate("INSERT INTO `customer` (`FirstName`, `LastName`, `Address1`, `Address2`, `City`, `State`, `Zip`, `Country`) VALUES" + 
+			ResultSet rs = executeUpdate("INSERT INTO `customer` (`FirstName`, `LastName`, `Address1`, `Address2`, `City`, `State`, `Zip`, `Country`) VALUES " + 
 				"(?, ?, ?, ?, ?, ?, ?, ?)", 
 				customer.getFirstName(), 
 				customer.getLastName(), 
@@ -86,7 +147,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 				customer.getState(),
 				customer.getZip(),
 				customer.getCountry());
-				if(rs!= null && rs.next())
+				if(rs != null && rs.next())
 	            {
 					customer.setCustomerId(rs.getInt(1));
 	            }
@@ -119,8 +180,22 @@ public class SalesBusinessImpl implements SalesBusiness {
 
 	@Override
 	public Product persistProduct(Product product) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			ResultSet rs = executeUpdate("INSERT INTO `product` (`ProductName`, `ProductDescription`, `UnitPrice`, `UnitCost`) VALUES " + 
+				"(?, ?, ?, ?)", 
+				product.getProductName(),
+				product.getProductDescription(),
+				product.getUnitPrice(),
+				product.getUnitCost());
+				if(rs != null && rs.next())
+	            {
+					product.setProductId(rs.getInt(1));
+	            }
+				
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
+		return product;
 	}
 
 	

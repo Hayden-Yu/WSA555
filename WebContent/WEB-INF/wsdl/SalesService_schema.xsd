@@ -39,6 +39,13 @@
       <xs:element name="Product" type="tns:Product"/>
       <xs:element name="SalesRep" type="tns:SalesRep"/>
       <xs:element name="Time" type="tns:Time"/>
+      <xs:element name="SalesAmount">
+      	<xs:simpleType>
+	      	<xs:restriction base="xs:decimal">
+				<xs:fractionDigits value="2"></xs:fractionDigits>
+			</xs:restriction>
+      	</xs:simpleType>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
 
