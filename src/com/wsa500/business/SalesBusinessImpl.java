@@ -98,7 +98,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	public List<Product> listProductByUnitPrice(BigDecimal unitPrice) {
 		LinkedList<Product> products = new LinkedList<Product>();
 		try {
-			ResultSet rs = executeQuery("SELECT * FROM `product` WHERE UnitPrice = ?", unitPrice);
+			ResultSet rs = executeQuery("SELECT * FROM `Product` WHERE UnitPrice = ?", unitPrice);
 			while(rs.next()) {
 				Product product = new Product();
 				product.setProductId(rs.getInt("ProductID"));
@@ -118,7 +118,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	public List<Product> listProductByCost(BigDecimal cost) {
 		LinkedList<Product> products = new LinkedList<Product>();
 		try {
-			ResultSet rs = executeQuery("SELECT * FROM `product` WHERE UnitCost = ?", cost);
+			ResultSet rs = executeQuery("SELECT * FROM `Product` WHERE UnitCost = ?", cost);
 			while(rs.next()) {
 				Product product = new Product();
 				product.setProductId(rs.getInt("ProductID"));
@@ -137,7 +137,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	@Override
 	public Customer persistCustomer(Customer customer) {
 		try {
-			ResultSet rs = executeUpdate("INSERT INTO `customer` (`FirstName`, `LastName`, `Address1`, `Address2`, `City`, `State`, `Zip`, `Country`) VALUES " + 
+			ResultSet rs = executeUpdate("INSERT INTO `Customer` (`FirstName`, `LastName`, `Address1`, `Address2`, `City`, `State`, `Zip`, `Country`) VALUES " + 
 				"(?, ?, ?, ?, ?, ?, ?, ?)", 
 				customer.getFirstName(), 
 				customer.getLastName(), 
@@ -161,7 +161,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	@Override
 	public Customer modifyCustoemr(Customer customer) {
 		try {
-			executeUpdate("UPDATE `customer` SET `FirstName` = ?, `LastName` = ?, `Address1` = ?, `Address2` = ?, `City` = ?, `State` = ?, `Zip` = ?, `Country` = ?" + 
+			executeUpdate("UPDATE `Customer` SET `FirstName` = ?, `LastName` = ?, `Address1` = ?, `Address2` = ?, `City` = ?, `State` = ?, `Zip` = ?, `Country` = ?" + 
 				"WHERE `CustomerID` = ?",
 				customer.getFirstName(), 
 				customer.getLastName(), 
@@ -181,7 +181,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	@Override
 	public Product persistProduct(Product product) {
 		try {
-			ResultSet rs = executeUpdate("INSERT INTO `product` (`ProductName`, `ProductDescription`, `UnitPrice`, `UnitCost`) VALUES " + 
+			ResultSet rs = executeUpdate("INSERT INTO `Product` (`ProductName`, `ProductDescription`, `UnitPrice`, `UnitCost`) VALUES " + 
 				"(?, ?, ?, ?)", 
 				product.getProductName(),
 				product.getProductDescription(),
