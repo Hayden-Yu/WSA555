@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import javax.naming.InitialContext;
@@ -229,7 +230,7 @@ public class SalesBusinessImpl implements SalesBusiness {
 	}
 	
 	private PreparedStatement prepareStatement(Connection connection, String sql, Object[] params) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement(sql);
+		PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		for (int i = 0; i < params.length; i++) {
 			if (params[i] instanceof String) {
 				statement.setString(i + 1, (String)params[i]);
