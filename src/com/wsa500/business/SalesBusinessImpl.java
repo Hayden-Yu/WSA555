@@ -63,15 +63,15 @@ public class SalesBusinessImpl implements SalesBusiness {
 				sale.getCustomer().setCountry(rs.getString("CSCountry"));
 				
 				sale.setSalesRep(new SalesRep());
-				sale.getCustomer().setCustomerId(rs.getInt("SalesRepID"));
-				sale.getCustomer().setFirstName(rs.getString("SRFirstName"));
-				sale.getCustomer().setLastName(rs.getString("SRLastName"));
-				sale.getCustomer().setAddress1(rs.getString("SRAddress1"));
-				sale.getCustomer().setAddress2(rs.getString("SRAddress2"));
-				sale.getCustomer().setCity(rs.getString("SRCity"));
-				sale.getCustomer().setState(rs.getString("SRState"));
-				sale.getCustomer().setZip(rs.getString("SRZip"));
-				sale.getCustomer().setCountry(rs.getString("SRCountry"));
+				sale.getSalesRep().setSalesRepId(rs.getInt("SalesRepID"));
+				sale.getSalesRep().setFirstName(rs.getString("SRFirstName"));
+				sale.getSalesRep().setLastName(rs.getString("SRLastName"));
+				sale.getSalesRep().setAddress1(rs.getString("SRAddress1"));
+				sale.getSalesRep().setAddress2(rs.getString("SRAddress2"));
+				sale.getSalesRep().setCity(rs.getString("SRCity"));
+				sale.getSalesRep().setState(rs.getString("SRState"));
+				sale.getSalesRep().setZip(rs.getString("SRZip"));
+				sale.getSalesRep().setCountry(rs.getString("SRCountry"));
 				
 				sale.setProduct(new Product());
 				sale.getProduct().setProductId(rs.getInt("ProductID"));
