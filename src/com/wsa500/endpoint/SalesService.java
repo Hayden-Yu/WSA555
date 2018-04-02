@@ -17,7 +17,7 @@ import com.wsa500.entity.Sale;
 	portName = "SalesPort",
 	serviceName = "SalesService",
 	targetNamespace = "http://com.wsa500.server",
-	wsdlLocation = "WEB-INF/wsdl/SalesPorts.wsdl"
+	wsdlLocation = "WEB-INF/wsdl/SalesService.wsdl"
 )
 public class SalesService {
 	private final SalesBusiness businessService;
