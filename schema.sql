@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `wsa500_sales`;
 USE `wsa500_sales`;
 
-CREATE USER IF NOT EXISTS 'wsa500_sales'@'localhost' IDENTIFIED BY 'salesPassword';
+CREATE USER 'wsa500_sales'@'localhost' IDENTIFIED BY 'salesPassword';
 GRANT ALL PRIVILEGES ON wsa500_sales.* TO 'wsa500_sales'@'localhost';
 FLUSH PRIVILEGES;
 
